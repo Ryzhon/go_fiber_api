@@ -1,0 +1,22 @@
+version: "3"
+services: 
+  db:
+    image: "postgres:13-alpine"
+    ports:
+     - "5432:5432"
+  
+    environment:
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_USER: "postgres"
+  goapp: # サービス名
+    build: # ビルドに使うDockerファイルのパス
+      context: .
+      dockerfile: ./build/Dockerfile
+    tty: true # コンテナの永続化
+
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    volumes:
+      - .:/go/src/app # マウントディレクトリ
